@@ -6,10 +6,10 @@ class WavelengthBackground {
         this.scrollY = 0;
         this.startTime = performance.now();
         
-        // Using your topography colors
+        // Updated colors for black theme - more visible and contrasting
         this.colors = {
-            primary: { r: 35, g: 34, b: 107 },    // --topo-start
-            secondary: { r: 214, g: 242, b: 255 } // --topo-end
+            primary: { r: 100, g: 200, b: 255 },   // Bright cyan blue
+            secondary: { r: 68, g: 100, b: 173 }  // Bright pink/magenta
         };
         
         this.waves = [];
@@ -41,14 +41,14 @@ class WavelengthBackground {
         
         // Create diverse wave types like different musical frequencies
         const waveTypes = [
-            // Bass waves - low, wide, slow
-            { ampRange: [40, 80], freqRange: [0.002, 0.004], speedRange: [0.5, 1.2], thickness: 2.5 },
-            // Mid waves - medium, varied
-            { ampRange: [15, 45], freqRange: [0.006, 0.012], speedRange: [1.0, 2.5], thickness: 1.8 },
-            // Treble waves - high, tight, fast
-            { ampRange: [5, 25], freqRange: [0.015, 0.035], speedRange: [2.0, 4.5], thickness: 1.2 },
-            // Harmony waves - irregular patterns
-            { ampRange: [10, 30], freqRange: [0.008, 0.018], speedRange: [0.8, 3.2], thickness: 1.5 }
+            // Bass waves - low, wide, slow, heavy noise
+            { ampRange: [40, 80], freqRange: [0.002, 0.004], speedRange: [0.5, 1.2], thickness: 2.5, noiseLevel: 0.08 },
+            // Mid waves - medium, varied, moderate noise
+            { ampRange: [15, 45], freqRange: [0.006, 0.012], speedRange: [1.0, 2.5], thickness: 1.8, noiseLevel: 0.05 },
+            // Treble waves - high, tight, fast, light noise
+            { ampRange: [5, 25], freqRange: [0.015, 0.035], speedRange: [2.0, 4.5], thickness: 1.2, noiseLevel: 0.03 },
+            // Harmony waves - irregular patterns, varied noise
+            { ampRange: [10, 30], freqRange: [0.008, 0.018], speedRange: [0.8, 3.2], thickness: 1.5, noiseLevel: 0.06 }
         ];
         
         const numWaves = 12; // More waves for complexity
@@ -69,14 +69,14 @@ class WavelengthBackground {
                 // Base position relative to screen height (0-1)
                 yOffsetRatio: (i + 1.5) / (numWaves + 3),
                 
-                // Varied opacity for depth
-                opacity: 0.08 + Math.random() * 0.25,
+                // Increased opacity for better visibility on black background
+                opacity: 0.25 + Math.random() * 0.35, // Increased from 0.15-0.3 to 0.25-0.6
                 
                 // Random starting phases
                 phase: Math.random() * Math.PI * 2,
                 
-                // Mixed colors
-                color: Math.random() > 0.4 ? this.colors.primary : this.colors.secondary,
+                // Mixed colors - bright cyan and pink
+                color: Math.random() > 0.5 ? this.colors.primary : this.colors.secondary,
                 
                 // Different line weights
                 thickness: waveType.thickness,
@@ -89,13 +89,19 @@ class WavelengthBackground {
                 modDepth: 0.2 + Math.random() * 0.4,
                 
                 // Scroll movement factor (how much it moves with scroll)
-                scrollFactor: 0.3 + Math.random() * 0.4 // Different parallax speeds
+                scrollFactor: 0.3 + Math.random() * 0.4, // Different parallax speeds
+                
+                // Noise level for organic texture (varies by wave type + individual variation)
+                noiseLevel: waveType.noiseLevel * (0.7 + Math.random() * 0.6), // 70%-130% of base noise
+                
+                // Noise frequency (how often the noise changes)
+                noiseFrequency: 0.5 + Math.random() * 1.5
             });
         }
     }
     
     drawWave(wave, elapsedTime) {
-        const { amplitude, frequency, speed, yOffsetRatio, opacity, phase, color, thickness, harmonics, modSpeed, modDepth, scrollFactor } = wave;
+        const { amplitude, frequency, speed, yOffsetRatio, opacity, phase, color, thickness, harmonics, modSpeed, modDepth, scrollFactor, noiseLevel, noiseFrequency } = wave;
         
         this.ctx.strokeStyle = `rgba(${color.r}, ${color.g}, ${color.b}, ${opacity})`;
         this.ctx.lineWidth = thickness;
@@ -130,8 +136,14 @@ class WavelengthBackground {
                 y += harmonicAmp * Math.sin(harmonicFreq * x + timeOffset + harmonicPhase);
             }
             
-            // Add some noise for organic feel
-            y += (Math.random() - 0.5) * amplitude * 0.05;
+            // Add varying noise levels for organic texture
+            // Noise changes over time and position for more natural feel
+            const noiseTime = elapsedTime * noiseFrequency + x * 0.001;
+            const baseNoise = (Math.random() - 0.5) * amplitude * noiseLevel;
+            const timeNoise = Math.sin(noiseTime) * amplitude * noiseLevel * 0.3;
+            const totalNoise = baseNoise + timeNoise;
+            
+            y += totalNoise;
             
             const finalY = wrappedY + y;
             

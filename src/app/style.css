@@ -1,18 +1,18 @@
 /* ===== VARIABLES ===== */
 :root {
-  /* Light theme colors */
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8f9fa;
-  --bg-card: #ffffff;
-  --text-primary: #2c3e50;
-  --text-secondary: #6c757d;
-  --accent-color: #3a86ff;
-  --accent-hover: #2574ff;
-  --border-color: #e9ecef;
+  /* Darker black theme colors */
+  --bg-primary: #000000;           /* Pure black */
+  --bg-secondary: #0a0a0a;         /* Very dark gray */
+  --bg-card: #111111;              /* Dark gray for cards */
+  --text-primary: #ffffff;         /* Pure white text */
+  --text-secondary: #cccccc;       /* Light gray text */
+  --accent-color: #64c8ff;         /* Bright cyan (matches wave primary) */
+  --accent-hover: #7bb2d6;         /* Bright pink (matches wave secondary) */
+  --border-color: #333333;         /* Dark gray borders */
   
-  /* Topography gradient colors */
-  --topo-start: rgb(35, 34, 107);
-  --topo-end: rgb(214, 242, 255);
+  /* Wave colors (for reference) */
+  --wave-primary: rgb(100, 200, 255);   /* Bright cyan blue */
+  --wave-secondary: rgb(0, 174, 255); /* Bright pink/magenta */
   
   /* Spacing */
   --spacing-xs: 0.5rem;
@@ -25,7 +25,7 @@
   --border-radius: 8px;
   --container-width: 1200px;
   --header-height: 70px;
-  --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
   --transition: all 0.3s ease;
 }
 
@@ -62,38 +62,35 @@ body {
   pointer-events: none;
 }
 
-/* Content containers - transparent sections */
+/* Content containers - NO BACKGROUND, fully transparent */
 .section {
-  background-color: transparent;
+  background: none;
   position: relative;
   z-index: 1;
-  margin: 4rem 0; /* Increased margin to show more background */
-  border-radius: var(--border-radius);
+  margin: 4rem 0;
   padding: var(--spacing-xl) 0;
 }
 
-/* Footer transparent */
+/* Footer - NO BACKGROUND */
 #footer {
-  background-color: rgba(248, 249, 250, 0.3);
-  backdrop-filter: blur(5px);
+  background: none;
   position: relative;
   z-index: 1;
   padding: var(--spacing-lg) 0;
   margin-top: var(--spacing-lg);
-  border-top: 1px solid rgba(233, 236, 239, 0.3);
 }
 
-/* Header - slightly transparent */
+/* Header - darker background for better contrast */
 #header {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: var(--header-height);
-  background-color: rgba(248, 249, 250, 0.85);
+  background-color: rgba(0, 0, 0, 0.9);
   z-index: 1000;
   transition: var(--transition);
-  border-bottom: 1px solid rgba(233, 236, 239, 0.5);
+  border-bottom: 1px solid var(--border-color);
   backdrop-filter: blur(15px);
 }
 
@@ -139,7 +136,7 @@ nav ul li a:hover::after {
 }
 
 .sticky {
-  background-color: rgba(248, 249, 250, 0.9);
+  background-color: rgba(0, 0, 0, 0.95);
   box-shadow: var(--shadow);
 }
 
@@ -175,12 +172,12 @@ nav ul li a:hover::after {
 
 .primary-btn {
   background-color: var(--accent-color);
-  color: #fff;
+  color: #000;
 }
 
 .primary-btn:hover {
   background-color: var(--accent-hover);
-  color: #fff;
+  color: #000;
   transform: translateY(-3px);
 }
 
@@ -192,7 +189,7 @@ nav ul li a:hover::after {
 
 .secondary-btn:hover {
   background-color: var(--accent-color);
-  color: #fff;
+  color: #000;
   transform: translateY(-3px);
 }
 
@@ -228,7 +225,6 @@ nav ul li a:hover::after {
   margin-bottom: var(--spacing-xl);
   position: relative;
   color: var(--text-primary);
-  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.8);
 }
 
 .section-title::after {
@@ -256,15 +252,14 @@ nav ul li a:hover::after {
   margin-bottom: var(--spacing-md);
   color: var(--text-secondary);
   font-size: 1.1rem;
-  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.7);
 }
 
 .about-image {
   overflow: hidden;
   border-radius: var(--border-radius);
   box-shadow: var(--shadow);
-  background-color: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(10px);
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
 }
 
 .about-image img {
@@ -284,20 +279,19 @@ nav ul li a:hover::after {
   gap: var(--spacing-lg);
 }
 
-/* Project cards - KEEP OPAQUE */
+/* Project cards - solid dark background */
 .project-card {
-  background-color: var(--bg-card); /* Solid white background */
+  background-color: var(--bg-card);
   border-radius: var(--border-radius);
   overflow: hidden;
   box-shadow: var(--shadow);
   transition: var(--transition);
   border: 1px solid var(--border-color);
-  /* Remove any transparency */
 }
 
 .project-card:hover {
   transform: translateY(-10px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 15px 40px rgba(100, 200, 255, 0.1);
   border-color: var(--accent-color);
 }
 
@@ -341,7 +335,7 @@ nav ul li a:hover::after {
 }
 
 .tech-tag {
-  background-color: rgba(58, 134, 255, 0.1);
+  background-color: rgba(100, 200, 255, 0.2);
   color: var(--accent-color);
   padding: 0.3rem 0.6rem;
   border-radius: 4px;
@@ -365,7 +359,8 @@ nav ul li a:hover::after {
 }
 
 .github-btn:hover {
-  background-color: #1a1e22;
+  background-color: var(--accent-color);
+  color: #000;
 }
 
 /* ===== CONTACT SECTION ===== */
@@ -392,10 +387,6 @@ nav ul li a:hover::after {
   color: var(--accent-color);
 }
 
-.contact-item a {
-  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.7);
-}
-
 .contact-form {
   display: flex;
   flex-direction: column;
@@ -410,13 +401,12 @@ nav ul li a:hover::after {
 .form-group textarea {
   width: 100%;
   padding: 1rem;
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: var(--bg-card);
   border: 1px solid var(--border-color);
   color: var(--text-primary);
   border-radius: var(--border-radius);
   font-family: inherit;
   transition: var(--transition);
-  backdrop-filter: blur(10px);
 }
 
 .form-group textarea {
@@ -428,18 +418,14 @@ nav ul li a:hover::after {
 .form-group textarea:focus {
   outline: none;
   border-color: var(--accent-color);
-  box-shadow: 0 0 0 2px rgba(58, 134, 255, 0.2);
-  background-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0 0 2px rgba(100, 200, 255, 0.2);
+  background-color: var(--bg-card);
 }
 
 .footer-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-.footer-content p {
-  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.7);
 }
 
 .social-links {
@@ -515,7 +501,7 @@ img {
     height: 100vh;
     width: 70%;
     max-width: 300px;
-    background-color: rgba(248, 249, 250, 0.95);
+    background-color: rgba(0, 0, 0, 0.95);
     flex-direction: column;
     justify-content: center;
     align-items: center;
