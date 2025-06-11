@@ -3,7 +3,7 @@
         "id": 1,
         "title": "cmd",
         "description": "Browser emulation of the CRT command line interface.",
-        "image": "/src/assets/cmd.png",
+        "image": "./assets/cmd.png",
         "technologies": ["Node.js", "CSS", "HTML"],
         "github": "",
         "demo": "https://egertonethan.xyz/hosted_projects/cmd/"
@@ -12,7 +12,7 @@
         "id": 2,
         "title": "MidiMeld",
         "description": "C# MIDI to computer input translator.",
-        "image": "/src/assets/midimeld.png",
+        "image": "./assets/midimeld.png",
         "technologies": ["C#", "MIDI", "Windows"],
         "github": "https://github.com/ethan-egerton/BSc-Dissertation-Artefact",
         "demo": ""
@@ -21,7 +21,7 @@
         "id": 3,
         "title": "Hand-Gesture Theremin",
         "description": "A theremin controlled by hand gestures using a webcam.",
-        "image": "/src/assets/hgt.png",
+        "image": "./assets/hgt.png",
         "technologies": ["Python", "OpenCV"],
         "github": "https://github.com/runtime-terr0rs/hack-pompey-2024",
         "demo": ""
@@ -30,7 +30,7 @@
         "id": 4,
         "title": "Spotify2Tabs",
         "description": "Web extension to open tabs for the song you are listening to on Spotify.",
-        "image": "/src/assets/s2t.png",
+        "image": "./assets/s2t.png",
         "technologies": ["JavaScript", "HTML", "CSS"],
         "github": "https://github.com/ethan-egerton/spotify2tabs",
         "demo": ""
@@ -39,7 +39,7 @@
         "id": 5,
         "title": "Mobile Fitness Tracker",
         "description": "Fitness tracker app developed in React Native in a team of 7.",
-        "image": "/src/assets/fitness.png",
+        "image": "./assets/fitness.png",
         "technologies": ["Typescript", "React Native"],
         "github": "",
         "demo": ""

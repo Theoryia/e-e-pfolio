@@ -1,0 +1,40 @@
+[build]
+  publish = "src"
+
+# Asset handling - serve files with correct MIME types
+[[headers]]
+  for = "*.js"
+  [headers.values]
+    Content-Type = "application/javascript"
+
+[[headers]]
+  for = "*.css"
+  [headers.values]
+    Content-Type = "text/css"
+
+[[headers]]
+  for = "*.json"
+  [headers.values]
+    Content-Type = "application/json"
+
+# Image handling
+[[headers]]
+  for = "*.png"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000"
+
+[[headers]]
+  for = "*.jpg"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000"
+
+[[headers]]
+  for = "*.jpeg"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000"
+
+# SPA fallback - make sure this is LAST
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

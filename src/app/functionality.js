@@ -14,7 +14,8 @@ function setupSmoothScrolling() {
                 });
                 
                 // Close mobile menu after clicking (if open)
-                if (document.querySelector('nav ul').classList.contains('active')) {
+                const navMenu = document.querySelector('nav ul');
+                if (navMenu && navMenu.classList.contains('active')) {
                     toggleMobileMenu();
                 }
             }
@@ -25,7 +26,6 @@ function setupSmoothScrolling() {
 // ----- Sticky header -----
 function setupStickyHeader() {
     const header = document.getElementById('header');
-    const headerHeight = header.offsetHeight;
     
     function updateHeader() {
         if (window.scrollY > 50) {
@@ -41,88 +41,18 @@ function setupStickyHeader() {
 
 // ----- Mobile Menu Toggle -----
 function setupMobileMenu() {
-    const header = document.getElementById('header');
-    // Create a menu toggle button for mobile view
-    const menuToggle = document.createElement('div');
-    menuToggle.className = 'menu-toggle';
-    menuToggle.innerHTML = '<span></span><span></span><span></span>';
-    header.querySelector('.container').appendChild(menuToggle);
-    
-    menuToggle.addEventListener('click', toggleMobileMenu);
+    const menuToggle = document.querySelector('.menu-toggle');
+    if (menuToggle) {
+        menuToggle.addEventListener('click', toggleMobileMenu);
+    }
 }
 
 function toggleMobileMenu() {
-    document.querySelector('nav ul').classList.toggle('active');
-    document.querySelector('.menu-toggle').classList.toggle('active');
-}
-
-// ----- Theme Toggle (Dark/Light) -----
-function setupThemeToggle() {
-    const footer = document.querySelector('footer .social-links');
+    const navMenu = document.querySelector('nav ul');
+    const menuToggle = document.querySelector('.menu-toggle');
     
-    // Create theme toggle button
-    const themeToggle = document.createElement('a');
-    themeToggle.href = '#';
-    themeToggle.className = 'theme-toggle';
-    themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
-    footer.appendChild(themeToggle);
-    
-    themeToggle.addEventListener('click', function(e) {
-        e.preventDefault();
-        document.body.classList.toggle('dark-theme');
-        
-        // Update icon
-        const icon = this.querySelector('i');
-        if (document.body.classList.contains('dark-theme')) {
-            icon.className = 'fas fa-sun';
-        } else {
-            icon.className = 'fas fa-moon';
-        }
-        
-        // Save preference to localStorage
-        const theme = document.body.classList.contains('dark-theme') ? 'dark' : 'light';
-        localStorage.setItem('theme', theme);
-    });
-    
-    // Check for saved theme preference
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light') {
-        document.body.classList.remove('dark-theme');
-        themeToggle.querySelector('i').className = 'fas fa-moon';
-    } else {
-        document.body.classList.add('dark-theme');
-        themeToggle.querySelector('i').className = 'fas fa-sun';
-    }
-}
-
-// ----- Contact Form Handling -----
-function setupContactForm() {
-    const contactForm = document.querySelector('.contact-form');
-    if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Get form data
-            const formData = {
-                name: document.getElementById('name').value,
-                email: document.getElementById('email').value,
-                message: document.getElementById('message').value
-            };
-            
-            // Here you would typically send the data to a server
-            // For demonstration, we'll just log it and show a success message
-            console.log('Form submission:', formData);
-            
-            // Show success message
-            const successMessage = document.createElement('div');
-            successMessage.className = 'success-message';
-            successMessage.textContent = 'Thanks for your message! I\'ll get back to you soon.';
-            
-            // Replace form with success message
-            contactForm.innerHTML = '';
-            contactForm.appendChild(successMessage);
-        });
-    }
+    if (navMenu) navMenu.classList.toggle('active');
+    if (menuToggle) menuToggle.classList.toggle('active');
 }
 
 // ----- Animation on scroll -----
@@ -148,84 +78,110 @@ function setupScrollAnimations() {
     });
 }
 
-// ----- Projects Loading -----
-async function loadProjects() {
-    try {
-        // Fetch projects data from JSON file
-        const response = await fetch('/src/assets/data/projects.json');
-        const projectsData = await response.json();
+// ----- Form handling -----
+function setupContactForm() {
+    const contactForm = document.querySelector('#contact-form');
+    if (!contactForm) return;
+    
+    contactForm.addEventListener('submit', function(e) {
+        e.preventDefault();
         
-        const projectsContainer = document.getElementById('projects-container');
-        if (!projectsContainer) return;
+        // Get form data
+        const formData = new FormData(contactForm);
+        const name = formData.get('name');
+        const email = formData.get('email');
+        const message = formData.get('message');
         
-        projectsData.forEach(project => {
-            const projectCard = document.createElement('div');
-            projectCard.className = 'project-card';
-            
-            // Create technologies list
-            const techList = project.technologies.map(tech => 
-                `<span class="tech-tag">${tech}</span>`
-            ).join('');
-            
-            // Only create buttons if links exist and aren't empty
-            let projectLinks = '';
-            
-            if (project.github && project.github.trim() !== '') {
-                projectLinks += `
-                    <a href="${project.github}" target="_blank" class="btn github-btn">
-                        <i class="fab fa-github"></i> GitHub
-                    </a>
-                `;
-            }
-            
-            if (project.demo && project.demo.trim() !== '') {
-                projectLinks += `
-                    <a href="${project.demo}" target="_blank" class="btn demo-btn">
-                        <i class="fas fa-external-link-alt"></i> Live Demo
-                    </a>
-                `;
-            }
-            
-            projectCard.innerHTML = `
-                <div class="project-image">
-                    <img src="${project.image}" alt="${project.title}">
-                </div>
-                <div class="project-info">
-                    <h3>${project.title}</h3>
-                    <p>${project.description}</p>
-                    <div class="tech-stack">
-                        ${techList}
-                    </div>
-                    <div class="project-links">
-                        ${projectLinks}
-                    </div>
-                </div>
-            `;
-            
-            projectsContainer.appendChild(projectCard);
-        });
-    } catch (error) {
-        console.error('Error loading projects:', error);
+        // Basic validation
+        if (!name || !email || !message) {
+            showNotification('Please fill in all fields', 'error');
+            return;
+        }
+        
+        // Email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            showNotification('Please enter a valid email address', 'error');
+            return;
+        }
+        
+        // Simulate form submission (replace with actual endpoint)
+        showNotification('Message sent successfully!', 'success');
+        contactForm.reset();
+    });
+}
+
+// ----- Notification system -----
+function showNotification(message, type = 'info') {
+    // Remove existing notifications
+    const existingNotification = document.querySelector('.notification');
+    if (existingNotification) {
+        existingNotification.remove();
+    }
+    
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.textContent = message;
+    
+    // Add to page
+    document.body.appendChild(notification);
+    
+    // Remove after 3 seconds
+    setTimeout(() => {
+        if (notification.parentNode) {
+            notification.remove();
+        }
+    }, 3000);
+}
+
+// ----- Theme toggle (if you want to add light/dark mode later) -----
+function setupThemeToggle() {
+    const themeToggle = document.querySelector('#theme-toggle');
+    if (!themeToggle) return;
+    
+    themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('light-theme');
+        localStorage.setItem('theme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
+    });
+    
+    // Load saved theme
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') {
+        document.body.classList.add('light-theme');
     }
 }
 
-// ----- initialise all functionality -----
-function initialisePortfolio() {
+// ----- Lazy loading for images -----
+function setupLazyLoading() {
+    const images = document.querySelectorAll('img[data-src]');
+    
+    const imageObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const img = entry.target;
+                img.src = img.dataset.src;
+                img.classList.remove('lazy');
+                imageObserver.unobserve(img);
+            }
+        });
+    });
+    
+    images.forEach(img => imageObserver.observe(img));
+}
+
+// ----- Initialize all functionality -----
+function initializePortfolio() {
     setupSmoothScrolling();
     setupStickyHeader();
     setupMobileMenu();
-    setupContactForm();
     setupScrollAnimations();
-    loadProjects();
+    setupContactForm();
+    setupThemeToggle();
+    setupLazyLoading();
+    
+    console.log('Portfolio functionality initialized');
 }
 
-// Export functions
-export { 
-    initialisePortfolio,
-    setupSmoothScrolling,
-    setupStickyHeader,
-    setupMobileMenu,
-    setupContactForm,
-    setupScrollAnimations,
-    loadProjects
-};
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', initializePortfolio);

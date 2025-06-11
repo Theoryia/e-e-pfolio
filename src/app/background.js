@@ -53,14 +53,14 @@ class WavelengthBackground {
         this.canvas.style.zIndex = '-10'; // Changed from -1 to -10
         this.canvas.style.pointerEvents = 'none';
         
-        console.log('Canvas dimensions set:', this.canvas.width, 'x', this.canvas.height);
+        //console.log('Canvas dimensions set:', this.canvas.width, 'x', this.canvas.height);
     }
     
     handleResize() {
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
         this.generateWaves();
-        console.log('Canvas resized:', this.canvas.width, 'x', this.canvas.height);
+        //console.log('Canvas resized:', this.canvas.width, 'x', this.canvas.height);
     }
     
     handleScroll() {
@@ -206,7 +206,7 @@ class WavelengthBackground {
         // Debug: Draw frame counter
         this.frameCount = (this.frameCount || 0) + 1;
         if (this.frameCount % 60 === 0) { // Log every 60 frames
-            console.log('Animation running, frame:', this.frameCount);
+            //console.log('Animation running, frame:', this.frameCount);
         }
     }
     

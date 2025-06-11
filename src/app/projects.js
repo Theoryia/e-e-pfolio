@@ -1,11 +1,12 @@
 // Function to fetch and generate project cards
 async function loadProjects() {
     try {
-        // Fetch projects data from JSON file
-        const response = await fetch('/src/assets/data/projects.json');
+        // Use relative path for Netlify
+        const response = await fetch('./assets/data/projects.json');
         const projectsData = await response.json();
         
         const projectsContainer = document.getElementById('projects-container');
+        if (!projectsContainer) return;
         
         projectsData.forEach(project => {
             const projectCard = document.createElement('div');
