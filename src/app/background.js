@@ -1,20 +1,39 @@
 class WavelengthBackground {
     constructor() {
         this.canvas = document.getElementById('background-canvas');
+        
+        // Debug: Check if canvas exists
+        if (!this.canvas) {
+            console.error('Canvas element not found! Make sure the canvas exists in HTML.');
+            return;
+        }
+        
         this.ctx = this.canvas.getContext('2d');
+        
+        // Debug: Check if context is available
+        if (!this.ctx) {
+            console.error('Canvas context not available!');
+            return;
+        }
+        
         this.animationId = null;
         this.scrollY = 0;
         this.startTime = performance.now();
         
         // Updated colors for black theme - more visible and contrasting
         this.colors = {
-            primary: { r: 100, g: 200, b: 255 },   // Bright cyan blue
-            secondary: { r: 68, g: 100, b: 173 }  // Bright pink/magenta
+            primary: { r: 68, g: 100, b: 173 },   // Bright cyan blue
+            secondary: { r: 164, g: 176, b: 245 }  // Bright pink/magenta
         };
         
         this.waves = [];
         this.init();
         this.generateWaves();
+        
+        // Debug: Log initial state
+        console.log('Canvas initialized:', this.canvas.width, 'x', this.canvas.height);
+        console.log('Number of waves generated:', this.waves.length);
+        
         this.animate();
         
         window.addEventListener('resize', () => this.handleResize());
@@ -24,12 +43,24 @@ class WavelengthBackground {
     init() {
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
+        
+        // Debug: Ensure canvas is visible - FIXED Z-INDEX
+        this.canvas.style.position = 'fixed';
+        this.canvas.style.top = '0';
+        this.canvas.style.left = '0';
+        this.canvas.style.width = '100%';
+        this.canvas.style.height = '100%';
+        this.canvas.style.zIndex = '-10'; // Changed from -1 to -10
+        this.canvas.style.pointerEvents = 'none';
+        
+        console.log('Canvas dimensions set:', this.canvas.width, 'x', this.canvas.height);
     }
     
     handleResize() {
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
         this.generateWaves();
+        console.log('Canvas resized:', this.canvas.width, 'x', this.canvas.height);
     }
     
     handleScroll() {
@@ -51,7 +82,7 @@ class WavelengthBackground {
             { ampRange: [10, 30], freqRange: [0.008, 0.018], speedRange: [0.8, 3.2], thickness: 1.5, noiseLevel: 0.06 }
         ];
         
-        const numWaves = 12; // More waves for complexity
+        const numWaves = 12;
         
         for (let i = 0; i < numWaves; i++) {
             const waveType = waveTypes[i % waveTypes.length];
@@ -69,8 +100,8 @@ class WavelengthBackground {
                 // Base position relative to screen height (0-1)
                 yOffsetRatio: (i + 1.5) / (numWaves + 3),
                 
-                // Increased opacity for better visibility on black background
-                opacity: 0.25 + Math.random() * 0.35, // Increased from 0.15-0.3 to 0.25-0.6
+                // Much higher opacity for testing visibility
+                opacity: 0.3 + Math.random() * 0.3, // Reduced back to reasonable levels
                 
                 // Random starting phases
                 phase: Math.random() * Math.PI * 2,
@@ -89,15 +120,17 @@ class WavelengthBackground {
                 modDepth: 0.2 + Math.random() * 0.4,
                 
                 // Scroll movement factor (how much it moves with scroll)
-                scrollFactor: 0.3 + Math.random() * 0.4, // Different parallax speeds
+                scrollFactor: 0.3 + Math.random() * 0.4,
                 
                 // Noise level for organic texture (varies by wave type + individual variation)
-                noiseLevel: waveType.noiseLevel * (0.7 + Math.random() * 0.6), // 70%-130% of base noise
+                noiseLevel: waveType.noiseLevel * (0.7 + Math.random() * 0.6),
                 
                 // Noise frequency (how often the noise changes)
                 noiseFrequency: 0.5 + Math.random() * 1.5
             });
         }
+        
+        console.log('Generated waves:', this.waves.length);
     }
     
     drawWave(wave, elapsedTime) {
@@ -162,13 +195,19 @@ class WavelengthBackground {
         const currentTime = performance.now();
         const elapsedTime = (currentTime - this.startTime) * 0.001;
         
-        // Clear canvas
+        // Clear canvas with a test background to see if it's working
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         
         // Draw all waves
-        this.waves.forEach(wave => {
+        this.waves.forEach((wave, index) => {
             this.drawWave(wave, elapsedTime);
         });
+        
+        // Debug: Draw frame counter
+        this.frameCount = (this.frameCount || 0) + 1;
+        if (this.frameCount % 60 === 0) { // Log every 60 frames
+            console.log('Animation running, frame:', this.frameCount);
+        }
     }
     
     animate() {
@@ -186,5 +225,6 @@ class WavelengthBackground {
 
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM loaded, initializing background...');
     new WavelengthBackground();
 });

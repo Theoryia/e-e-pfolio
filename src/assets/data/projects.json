@@ -2,7 +2,7 @@
     {
         "id": 1,
         "title": "cmd",
-        "description": "Browser emulation of 1999 command-line computer.",
+        "description": "Browser emulation of the CRT command line interface.",
         "image": "/src/assets/cmd.png",
         "technologies": ["Node.js", "CSS", "HTML"],
         "github": "",

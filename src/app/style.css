@@ -51,47 +51,47 @@ body {
   position: relative;
 }
 
-/* Canvas Background */
+/* Canvas Background - FIXED Z-INDEX */
 #background-canvas {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: -1;
+  z-index: -10; /* Changed from -1 to -10 to ensure it's behind everything */
   pointer-events: none;
 }
 
-/* Content containers - NO BACKGROUND, fully transparent */
+/* Content containers - ensure proper z-index stacking */
 .section {
   background: none;
   position: relative;
-  z-index: 1;
+  z-index: 10; /* Increased from 1 to 10 to be above canvas */
   margin: 4rem 0;
   padding: var(--spacing-xl) 0;
 }
 
-/* Footer - NO BACKGROUND */
+/* Footer - ensure it's above canvas */
 #footer {
   background: none;
   position: relative;
-  z-index: 1;
+  z-index: 10; /* Increased from 1 to 10 */
   padding: var(--spacing-lg) 0;
   margin-top: var(--spacing-lg);
 }
 
-/* Header - darker background for better contrast */
+/* Header - ensure it's above everything */
 #header {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: var(--header-height);
-  background-color: rgba(0, 0, 0, 0.9);
-  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 1000; /* Keep header at highest level */
   transition: var(--transition);
-  border-bottom: 1px solid var(--border-color);
-  backdrop-filter: blur(15px);
+  border-bottom: 1px solid rgba(51, 51, 51, 0.3);
+  backdrop-filter: blur(10px);
 }
 
 #header .container {
@@ -136,7 +136,7 @@ nav ul li a:hover::after {
 }
 
 .sticky {
-  background-color: rgba(0, 0, 0, 0.95);
+  background-color: rgba(0, 0, 0, 0.85); /* Still more transparent than before */
   box-shadow: var(--shadow);
 }
 
@@ -260,6 +260,8 @@ nav ul li a:hover::after {
   box-shadow: var(--shadow);
   background-color: var(--bg-card);
   border: 1px solid var(--border-color);
+  position: relative;
+  z-index: 15; /* Added z-index to ensure image is above canvas */
 }
 
 .about-image img {
@@ -287,6 +289,8 @@ nav ul li a:hover::after {
   box-shadow: var(--shadow);
   transition: var(--transition);
   border: 1px solid var(--border-color);
+  position: relative;
+  z-index: 15; /* Added z-index to ensure cards are above canvas */
 }
 
 .project-card:hover {
@@ -407,6 +411,8 @@ nav ul li a:hover::after {
   border-radius: var(--border-radius);
   font-family: inherit;
   transition: var(--transition);
+  position: relative;
+  z-index: 15; /* Added z-index to ensure forms are above canvas */
 }
 
 .form-group textarea {
@@ -501,7 +507,7 @@ img {
     height: 100vh;
     width: 70%;
     max-width: 300px;
-    background-color: rgba(0, 0, 0, 0.95);
+    background-color: rgba(0, 0, 0, 0.85); /* Reduced from 0.95 to 0.85 */
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -509,7 +515,7 @@ img {
     transition: right 0.3s ease;
     box-shadow: var(--shadow);
     z-index: 1000;
-    backdrop-filter: blur(15px);
+    backdrop-filter: blur(10px); /* Reduced blur for mobile menu too */
   }
   
   nav ul.active {
